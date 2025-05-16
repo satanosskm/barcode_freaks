@@ -65,11 +65,58 @@ def return_to_stockage():
     root.destroy()
     subprocess.run(["python", "stockage.py"])
 
+
+from tkinter import messagebox
+
 # Création de la fenêtre principale
 root = tk.Tk()
 root.title("Détails de la créature")
 root.state("zoomed")  # Démarrer en mode maximisé
 root.configure(bg="lightblue")
+
+def release_freak(freak_id):
+    """Supprime le freak du profil après confirmation."""
+    if not messagebox.askyesno("Confirmation", "Voulez-vous vraiment relâcher ce freak ? Cette action est irréversible."):
+        return
+    if os.path.exists(profile_path):
+        with open(profile_path, "r") as file:
+            lines = file.readlines()
+        new_lines = []
+        current_freak_id = None
+        # Chercher l'actuel freak
+        for line in lines:
+            if line.startswith("current_freak="):
+                current_freak_id = line.strip().split("=", 1)[1]
+                break
+        # On va stocker la nouvelle liste de freaks pour éventuellement choisir le premier
+        new_freak_lines = []
+        for line in lines:
+            if line.startswith("freaks=["):
+                content = line[8:].strip()
+                if content.endswith("]"):
+                    content = content[:-1]
+                freak_lines = content.split(",")
+                for freak_line in freak_lines:
+                    freak_line = freak_line.strip()
+                    if not freak_line.startswith(freak_id) and freak_line:
+                        new_freak_lines.append(freak_line)
+                new_content = ", ".join(new_freak_lines)
+                new_line = f"freaks=[{new_content}]\n"
+                new_lines.append(new_line)
+            elif line.startswith("current_freak=") and current_freak_id == freak_id:
+                # Si le freak supprimé est l'actuel, on met le premier freak restant comme actuel, sinon vide
+                if new_freak_lines:
+                    # Le premier freak restant
+                    first_freak_id = new_freak_lines[0].split("|")[0]
+                    new_lines.append(f"current_freak={first_freak_id}\n")
+                else:
+                    new_lines.append("current_freak=\n")
+            else:
+                new_lines.append(line)
+        with open(profile_path, "w") as file:
+            file.writelines(new_lines)
+    messagebox.showinfo("Freak relâché", "Le freak a été relâché avec succès !")
+    return_to_stockage()
 
 # Charger les détails de la créature
 freak_id = sys.argv[1]  # ID complet passé depuis stockage.py
@@ -118,15 +165,21 @@ stats_label.pack(pady=5)
 level_label = tk.Label(details_frame, text=f"Niveau {freak['level']}", font=("Arial", 16), bg="lightblue")
 level_label.pack(pady=5)
 
-# Bouton pour revenir au stockage
-back_button = tk.Button(root, text="Retour au stockage", font=("Arial", 14), bg="lightcoral",
-                        command=return_to_stockage)
-back_button.pack(pady=20)
+# Cadre pour les boutons d'action
+button_frame = tk.Frame(root, bg="lightblue")
+button_frame.pack(pady=20)
 
-# Ajouter un bouton pour définir comme freak actuel
-set_current_button = tk.Button(root, text="Définir comme freak actuel", font=("Arial", 14), bg="lightgreen",
+back_button = tk.Button(button_frame, text="Retour au stockage", font=("Arial", 14), bg="lightcoral", width=30,
+                        command=return_to_stockage)
+back_button.pack(pady=8, fill="x", padx=40)
+
+set_current_button = tk.Button(button_frame, text="Définir comme freak actuel", font=("Arial", 14), bg="lightgreen", width=30,
                                 command=lambda: set_as_current_freak(freak["id"]))
-set_current_button.pack(pady=20)
+set_current_button.pack(pady=8, fill="x", padx=40)
+
+release_button = tk.Button(button_frame, text="Relâcher ce freak", font=("Arial", 14, "bold"), bg="orange", width=30,
+                           command=lambda: release_freak(freak["id"]))
+release_button.pack(pady=8, fill="x", padx=40)
 
 # Lancer la boucle principale
 root.mainloop()

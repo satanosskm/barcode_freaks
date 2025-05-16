@@ -137,7 +137,7 @@ def reset_interface():
     image_label.config(image=default_image_tk)
     image_label.image = default_image_tk
     adopt_button.config(state="disabled")
-    reset_button.config(state="disabled")
+    reset_button.config(state="normal")
     message_label.config(text="")  # Réinitialiser le message
 
 def return_to_main_menu():
