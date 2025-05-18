@@ -12,7 +12,7 @@ Ce jeu s'inspire de plusieurs œuvres et concepts :
 
 ## Prérequis
 Pour faire fonctionner le jeu, vous devez disposer des éléments suivants :
-- **Python 3.10 ou supérieur** : Assurez-vous d'avoir une version récente de Python installée. Vous pouvez le télécharger depuis [python.org](https://www.python.org/).
+- **Python 3.10 ou supérieur** : Assurez-vous d'avoir une version récente de Python installée. Vous pouvez le télécharger depuis [python.org](https://www.python.org/). Lors de l'installation, cliquez sur "Customize Installation" puis cochez "Add Python to environment variables". Si vous avez déjà installé Python sans cocher cette option, vous pouvez l'ajouter plus tard via "Applications et fonctionnalités" dans Windows, en modifiant l'installation de Python.
 - **pip** : L'outil de gestion des paquets Python, généralement inclus avec Python.
 
 ## Installation des dépendances
