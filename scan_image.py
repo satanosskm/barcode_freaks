@@ -4,8 +4,24 @@ from PIL import Image
 from pyzbar.pyzbar import decode
 import pyperclip
 
+def is_valid_ean(barcode):
+    """Vérifie si un code-barres EAN-13 ou EAN-8 est valide."""
+    if not barcode.isdigit():
+        return False
+    if len(barcode) == 13:
+        checksum = sum(int(barcode[i]) * (3 if i % 2 else 1) for i in range(12))
+        check_digit = (10 - (checksum % 10)) % 10
+        return check_digit == int(barcode[-1])
+    elif len(barcode) == 8:
+        # EAN-8: impairs (0,2,4,6) *3, pairs (1,3,5) *1
+        checksum = sum(int(barcode[i]) * (3 if i % 2 == 0 else 1) for i in range(7))
+        check_digit = (10 - (checksum % 10)) % 10
+        return check_digit == int(barcode[-1])
+    else:
+        return False
+
 def select_image():
-    """Ouvre une boîte de dialogue pour sélectionner une image et lit le code-barres."""
+    """Ouvre une boîte de dialogue pour sélectionner une image et lit le code-barres EAN-13 ou EAN-8."""
     file_path = filedialog.askopenfilename(
         title="Sélectionnez une image",
         filetypes=[("Images PNG et JPEG", "*.png;*.jpg;*.jpeg")]
@@ -22,14 +38,15 @@ def select_image():
             messagebox.showerror("Erreur", "Aucun code-barres détecté dans l'image.")
             return
 
-        # Extraire le premier code-barres EAN-13 trouvé
+        # Extraire le premier code-barres EAN-13 ou EAN-8 trouvé
         for obj in decoded_objects:
-            if obj.type == "EAN13":
-                ean13_code = obj.data.decode("utf-8")
-                ean13_var.set(ean13_code)
-                return
+            if obj.type in ("EAN13", "EAN8"):
+                code = obj.data.decode("utf-8")
+                if is_valid_ean(code):
+                    ean13_var.set(code)
+                    return
 
-        messagebox.showerror("Erreur", "Aucun code-barres EAN-13 trouvé dans l'image.")
+        messagebox.showerror("Erreur", "Aucun code-barres EAN-13 ou EAN-8 valide trouvé dans l'image.")
     except Exception as e:
         messagebox.showerror("Erreur", f"Impossible de lire l'image : {e}")
 
@@ -55,8 +72,8 @@ ean13_var = tk.StringVar()
 select_button = tk.Button(root, text="Sélectionner une image", command=select_image, font=("Arial", 14), bg="lightgreen")
 select_button.pack(pady=10)
 
-# Champ pour afficher le code EAN-13
-ean13_label = tk.Label(root, text="Code EAN-13 :", font=("Arial", 12), bg="lightblue")
+# Champ pour afficher le code EAN-13 ou EAN-8
+ean13_label = tk.Label(root, text="Code EAN-13 ou EAN-8 :", font=("Arial", 12), bg="lightblue")
 ean13_label.pack(pady=5)
 ean13_entry = tk.Entry(root, textvariable=ean13_var, font=("Arial", 14), state="readonly", width=30)
 ean13_entry.pack(pady=5)

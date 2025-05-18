@@ -444,12 +444,36 @@ if __name__ == "__main__":
     # Buttons
     button_frame = tk.Frame(root, bg="lightblue")
     button_frame.place(relx=0.5, rely=0.85, anchor="center")  # Centered at the bottom
+
+
+    # --- Bouton Combat rapide ---
+    auto_attack_job = None
+    def start_auto_attack(event=None):
+        auto_attack()
+    def stop_auto_attack(event=None):
+        global auto_attack_job
+        if auto_attack_job:
+            root.after_cancel(auto_attack_job)
+            auto_attack_job = None
+    def auto_attack():
+        global auto_attack_job
+        if action_button['state'] == 'normal':
+            attack()
+            auto_attack_job = root.after(80, auto_attack)  # 80ms entre chaque attaque
+        else:
+            auto_attack_job = None
+
+    quick_button = Button(button_frame, text="Combat rapide", font=("Arial", 16), bg="#ff9900", fg="white", width=14)
+    quick_button.grid(row=0, column=0, padx=(0, 10))
+    quick_button.bind('<ButtonPress-1>', start_auto_attack)
+    quick_button.bind('<ButtonRelease-1>', stop_auto_attack)
+
     action_button = Button(button_frame, text="Attaquer", font=("Arial", 16), command=attack, width=12)
-    action_button.grid(row=0, column=0, padx=20)
+    action_button.grid(row=0, column=1, padx=10)
 
     # Bouton "Retourner à la ligue"
     return_button = tk.Button(button_frame, text="Retourner à la ligue", font=("Arial", 16), bg="lightcoral", command=surrender, width=20)
-    return_button.grid(row=0, column=1, padx=20)
+    return_button.grid(row=0, column=2, padx=10)
 
     # Start the combat
     start_combat()

@@ -145,13 +145,22 @@ def return_to_main_menu():
     root.destroy()
     subprocess.run(["python", "barcodefreaks.py"])
 
-def is_valid_ean13(barcode):
-    """Vérifie si un code-barres EAN-13 est valide."""
-    if len(barcode) != 13 or not barcode.isdigit():
+
+def is_valid_ean(barcode):
+    """Vérifie si un code-barres EAN-13 ou EAN-8 est valide."""
+    if not barcode.isdigit():
         return False
-    checksum = sum(int(barcode[i]) * (3 if i % 2 else 1) for i in range(12))
-    check_digit = (10 - (checksum % 10)) % 10
-    return check_digit == int(barcode[-1])
+    if len(barcode) == 13:
+        checksum = sum(int(barcode[i]) * (3 if i % 2 else 1) for i in range(12))
+        check_digit = (10 - (checksum % 10)) % 10
+        return check_digit == int(barcode[-1])
+    elif len(barcode) == 8:
+        # EAN-8: impairs (0,2,4,6) *3, pairs (1,3,5) *1
+        checksum = sum(int(barcode[i]) * (3 if i % 2 == 0 else 1) for i in range(7))
+        check_digit = (10 - (checksum % 10)) % 10
+        return check_digit == int(barcode[-1])
+    else:
+        return False
 
 def generate_creature():
     """Génère une bestiole et met à jour l'image et les informations."""
@@ -160,8 +169,9 @@ def generate_creature():
 
     barcode = barcode_var.get()
 
-    # Vérifier si le code-barres est valide
-    if not is_valid_ean13(barcode):
+
+    # Vérifier si le code-barres est valide (EAN-13 ou EAN-8)
+    if not is_valid_ean(barcode):
         message_label.config(text="Code-barre non valide !", fg="red")
         return
 
@@ -233,8 +243,8 @@ def generate_creature():
     adopt_button.config(state="normal")
     reset_button.config(state="normal")
 
-def select_image_and_get_ean13():
-    """Ouvre une boîte de dialogue pour sélectionner une image et lit le code-barres EAN-13."""
+def select_image_and_get_ean():
+    """Ouvre une boîte de dialogue pour sélectionner une image et lit le code-barres EAN-13 ou EAN-8."""
     file_path = filedialog.askopenfilename(
         title="Sélectionnez une image",
         filetypes=[("Images PNG et JPEG", "*.png;*.jpg;*.jpeg")]
@@ -251,22 +261,22 @@ def select_image_and_get_ean13():
             messagebox.showerror("Erreur", "Aucun code-barres détecté dans l'image.")
             return None
 
-        # Extraire le premier code-barres EAN-13 trouvé
+        # Extraire le premier code-barres EAN-13 ou EAN-8 trouvé
         for obj in decoded_objects:
-            if obj.type == "EAN13":
+            if obj.type in ("EAN13", "EAN8"):
                 return obj.data.decode("utf-8")
 
-        messagebox.showerror("Erreur", "Aucun code-barres EAN-13 trouvé dans l'image.")
+        messagebox.showerror("Erreur", "Aucun code-barres EAN-13 ou EAN-8 trouvé dans l'image.")
         return None
     except Exception as e:
         messagebox.showerror("Erreur", f"Impossible de lire l'image : {e}")
         return None
 
 def scan_barcode_image():
-    """Scanne une image pour lire un code-barres EAN-13 et valide automatiquement."""
-    ean13_code = select_image_and_get_ean13()
-    if ean13_code:
-        barcode_var.set(ean13_code)  # Ajoute le code EAN-13 à l'entrée
+    """Scanne une image pour lire un code-barres EAN-13 ou EAN-8 et valide automatiquement."""
+    code = select_image_and_get_ean()
+    if code:
+        barcode_var.set(code)  # Ajoute le code à l'entrée
         generate_creature()  # Valide automatiquement
 
 # Création de la fenêtre principale
@@ -295,7 +305,7 @@ root.grid_columnconfigure(1, weight=1)
 root.grid_columnconfigure(2, weight=1)
 
 # Champs et bouton pour générer une bestiole
-barcode_label = tk.Label(root, text="Entrez un code-barres EAN-13 :", font=("Arial", 14))
+barcode_label = tk.Label(root, text="Entrez un code-barres EAN-13 ou EAN-8 :", font=("Arial", 14))
 barcode_label.grid(row=0, column=0, padx=5, pady=5, sticky="e")
 
 barcode_var = StringVar()
