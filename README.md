@@ -54,9 +54,9 @@ Cela ouvrira l'interface principale du jeu.
   - **Défense** : Entre 1 et 20.
   - **PV** : Entre 20 et 40.
   Il en va de même pour les adversaires. Essayez d'adopter ceux qui ont les meilleures stats !
-- **Codes-barres compatibles** : Les codes-barres compatibles sont au format **EAN-13**, c'est-à-dire ceux à 13 chiffres. Vous pouvez :
-  - Entrer directement les 13 chiffres dans le champ prévu.
-  - Fournir une image (en **.jpg** ou **.png**) d'un code-barre en gros plan et centré dans l'image.
+- **Codes-barres compatibles** : Les codes-barres compatibles sont au format **EAN-13** (13 chiffres) et **EAN-8** (8 chiffres). Vous pouvez :
+  - Entrer directement les 13 ou 8 chiffres dans le champ prévu.
+  - Fournir une image (en **.jpg** ou **.png**) d'un code-barre EAN-13 ou EAN-8 en gros plan et centré dans l'image.
 
 ## Développement
 - **Durée** : Le jeu a été développé en 5 jours début mai 2025.
