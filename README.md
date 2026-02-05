@@ -25,11 +25,30 @@ Ce jeu s'inspire de plusieurs œuvres et concepts :
 - **Monster Rancher** : Pour le principe d'entraînement et la ligue.
 
 ## Fonctionnement du jeu
-1. **Scanner des codes-barres** : Tapez un code-barre de 8 ou 13 chiffres valide (ou importez une image) pour générer des créatures.
-2. **Freakopedia** : Consultez votre collection.
-3. **Mes Freaks** : Gérez votre équipe active.
-4. **Ligue Barcode Freaks** : Grimpez les échelons en battant 50 adversaires.
-5. **Entraînement** : Améliorez les stats (Force, Défense, PV) grâce aux points d'espèce.
+1. **Scanner des codes-barres** : Scannez des codes-barres pour découvrir de nouvelles créatures.
+2. **Freakopedia** : Consultez les fiches des créatures découvertes.
+3. **Mes Freaks** : Gérez vos créatures capturées.
+4. **Ligue Barcode Freaks** : Affrontez des adversaires dans une ligue compétitive.
+5. **Entraînement** : Améliorez les statistiques de vos créatures pour les rendre plus puissantes.
+6. **Profil** : Gérez votre profil et vos données de jeu.
+
+## Explications
+- **Objectif principal** : Vaincre l'adversaire 50 de la ligue.
+- **Points d'espèce** : Chaque nouveau code-barre scanné vous donne 5 points pour l'espèce rencontrée.
+- **Entraînement** : Vous pouvez entraîner votre freak pour augmenter son attaque, sa défense ou ses points de vie. L'entraînement peut être faible, moyen ou super, rapportant plus ou moins de points.
+- **Niveau maximum** : Le niveau maximum de votre freak ne peut pas dépasser :
+  - Le nombre de points de son espèce que vous possédez.
+  - Le niveau de votre dernier adversaire dans la ligue.
+- **Codes-barres réutilisables** : Vous pouvez scanner plusieurs fois le même code-barre et recommencer l'entraînement de zéro. Vos points ne sont jamais consommés, ils sont débloqués définitivement.
+- **Types et créatures** : Il y a 40 créatures différentes réparties en 8 types. Chaque type est efficace contre un autre type, infligeant 50% de dégâts supplémentaires.
+- **Niveaux et stats** : Chaque créature générée est de base au niveau 1. Ses statistiques sont les suivantes :
+  - **Attaque** : Entre 1 et 20.
+  - **Défense** : Entre 1 et 20.
+  - **PV** : Entre 20 et 40.
+  Il en va de même pour les adversaires. Essayez d'adopter ceux qui ont les meilleures stats !
+- **Codes-barres compatibles** : Les codes-barres compatibles sont au format **EAN-13** (13 chiffres) et **EAN-8** (8 chiffres). Vous pouvez :
+  - Entrer directement les 13 ou 8 chiffres dans le champ prévu.
+  - Fournir une image (en **.jpg** ou **.png**) d'un code-barre EAN-13 ou EAN-8 en gros plan et centré dans l'image.
 
 ---
 
