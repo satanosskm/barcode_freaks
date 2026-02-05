@@ -7,9 +7,10 @@ from creatures import creatures
 import hashlib
 import random
 import subprocess
+from utils import get_profiles_dir, get_image_path  # Import des utilitaires
 
 # Ajout de la variable pour le profil actif
-PROFILS_DIR = "profils"
+PROFILS_DIR = get_profiles_dir()
 with open(os.path.join(PROFILS_DIR, "last_profile.txt"), "r") as file:
     current_profile = file.read().strip()
 
@@ -215,7 +216,7 @@ def generate_creature():
 
     try:
         # Chargement de l'image spécifique si disponible
-        image_path = os.path.join(os.path.dirname(__file__), "images", f"{creature_name.lower()}.png")
+        image_path = get_image_path(f"{creature_name.lower()}.png")
         if os.path.exists(image_path):  # Vérifie si le fichier existe
             image = Image.open(image_path)
             image = image.resize((600, 600))  # Redimensionnez à 600x600 pixels
@@ -287,7 +288,7 @@ root.configure(bg="lightblue")
 
 # Placeholder par défaut
 try:
-    default_image_path = os.path.join(os.path.dirname(__file__), "images", "logo_BF.png")  # Charger logo_BF.png
+    default_image_path = get_image_path("logo_BF.png")  # Charger logo_BF.png
     default_image = Image.open(default_image_path).resize((600, 600))  # Chargement de logo_BF.png
     default_image_tk = ImageTk.PhotoImage(default_image)
 except FileNotFoundError:

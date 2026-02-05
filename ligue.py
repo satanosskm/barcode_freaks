@@ -4,8 +4,9 @@ import os
 from dictionnaire import adversaire_dict  # Importer le dictionnaire des noms d'adversaires
 from dueltest import generate_opponent  # Importer les fonctions nécessaires
 from gen_ligue import generate_freak_from_ean13  # Pour générer les adversaires si besoin
+from utils import get_profiles_dir  # Import des utilitaires
 
-PROFILS_DIR = "profils"
+PROFILS_DIR = get_profiles_dir()
 LAST_PROFILE_FILE = os.path.join(PROFILS_DIR, "last_profile.txt")
 
 def load_current_freak():

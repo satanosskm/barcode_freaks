@@ -7,10 +7,11 @@ import sys
 import subprocess
 from creatures import creatures
 from table import calculate_damage, is_effective  # Ensure is_effective is imported
+from utils import get_profiles_dir, get_image_path  # Import des utilitaires
 
-PROFILS_DIR = "profils"
+PROFILS_DIR = get_profiles_dir()
 LAST_PROFILE_FILE = os.path.join(PROFILS_DIR, "last_profile.txt")
-IMAGES_DIR = "images"
+IMAGES_DIR = "images"  # Conservé pour compatibilité
 
 def load_current_freak():
     """Charge l'ID du freak actuel depuis le profil."""
@@ -143,7 +144,7 @@ def generate_opponent(barcode):
 
 def load_freak_image(freak_name):
     """Load the image for a freak by its name."""
-    image_path = os.path.join(IMAGES_DIR, f"{freak_name.lower()}.png")
+    image_path = get_image_path(f"{freak_name.lower()}.png")
     if os.path.exists(image_path):
         img = Image.open(image_path).resize((300, 300))  # Adjusted image size
         return ImageTk.PhotoImage(img)

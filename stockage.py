@@ -5,11 +5,12 @@ import os
 import logging
 import functools  # Importer partial pour corriger la gestion des clics
 import subprocess
+from utils import get_profiles_dir, get_image_path  # Import des utilitaires
 
 # Configuration du logging pour déboguer
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
-PROFILS_DIR = "profils"
+PROFILS_DIR = get_profiles_dir()
 current_profile = open(os.path.join(PROFILS_DIR, "last_profile.txt")).read().strip()
 profile_path = os.path.join(PROFILS_DIR, f"{current_profile}.txt")
 
@@ -93,7 +94,7 @@ def display_freaks(freaks):
         frame.grid(row=row, column=col, padx=10, pady=10)
 
         # Charger l'image de la créature
-        image_path = os.path.join("images", f"{freak['name'].lower()}.png")
+        image_path = get_image_path(f"{freak['name'].lower()}.png")
         try:
             if os.path.exists(image_path):
                 img = Image.open(image_path)

@@ -32,8 +32,9 @@ def calculate_damage(base_damage, attacker_type, defender_type):
 
     # Étape 2 : Application du bonus d'interaction des types
     if is_effective(attacker_type.capitalize(), defender_type.capitalize()):
-        adjusted_damage = -(-base_damage * 1.5 // 1)  # Arrondi à l'entier supérieur
+        # Utiliser l'entier supérieur pour le bonus 1.5x
+        adjusted_damage = int((base_damage * 3 + 1) // 2)
         return adjusted_damage
 
     # Étape 3 : Retour des dégâts de base si pas d'avantage
-    return base_damage
+    return int(base_damage)

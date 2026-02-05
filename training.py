@@ -3,10 +3,11 @@ from PIL import Image, ImageTk
 import os
 import random
 import subprocess
+from utils import get_profiles_dir, get_image_path  # Import des utilitaires
 
-PROFILS_DIR = "profils"
+PROFILS_DIR = get_profiles_dir()
 LAST_PROFILE_FILE = os.path.join(PROFILS_DIR, "last_profile.txt")
-IMAGES_DIR = "images"
+IMAGES_DIR = "images"  # Conservé pour compatibilité
 
 # Charger le profil actif
 def load_current_profile():
@@ -196,7 +197,7 @@ def main():
     root.configure(bg="lightblue")  # Couleur de fond harmonieuse
 
     # Chargement de l'image après l'initialisation de Tkinter
-    image_path = os.path.join("images", f"{freak_details['id'].split('_')[0]}.png")
+    image_path = get_image_path(f"{freak_details['id'].split('_')[0]}.png")
     freak_image = None
     if os.path.exists(image_path):
         image = Image.open(image_path).resize((500, 500))  # Taille ajustée à 500x500
